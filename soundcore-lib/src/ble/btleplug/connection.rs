@@ -2,6 +2,7 @@ use btleplug::api::{CharPropFlags, Characteristic, Peripheral as _, Service};
 use btleplug::platform::Peripheral;
 use futures::StreamExt;
 use log::{error, trace, warn};
+use std::sync::{Arc, RwLock};
 use tokio::sync::mpsc;
 use tokio::sync::mpsc::error::TrySendError;
 use tokio::sync::mpsc::Receiver;
