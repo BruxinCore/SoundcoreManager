@@ -80,12 +80,11 @@ impl BtlePlugConnection {
             trace!("Inspecting Service: {:#?}", service);
             let read_characteristic = service.characteristics.clone().into_iter().find(|c| {
                 c.properties.contains(CharPropFlags::NOTIFY)
-                    && c.properties.contains(CharPropFlags::READ)
             });
 
             let write_characteristic = service.characteristics.clone().into_iter().find(|c| {
                 c.properties.contains(CharPropFlags::WRITE)
-                    && c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE)
+                    || c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE)
             });
 
             if let (Some(read_characteristic), Some(write_characteristic)) =

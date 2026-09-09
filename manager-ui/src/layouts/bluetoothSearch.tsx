@@ -42,7 +42,8 @@ export const BluetoothSearchLayout: React.FC = () => {
   if (selectedDevice && failedConnectionMap.has(selectedDevice.descriptor.addr)) {
     setIsConnecting(false);
     const reason = failedConnectionMap.get(selectedDevice.descriptor.addr);
-    // TODO: Show toast or snackbar
+    // Show an explicit alert to the user instead of just failing silently
+    alert(`Failed to connect to ${selectedDevice.descriptor.name}\nReason: ${reason}`);
     console.error(`Failed to connect to ${selectedDevice.descriptor.name}, reason: ${reason}`);
     removeFailedConnection(selectedDevice.descriptor.addr);
   }
