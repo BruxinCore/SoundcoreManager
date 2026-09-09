@@ -166,6 +166,16 @@ impl BLEConnection for BtlePlugConnection {
     }
 
     async fn write(&self, bytes: &[u8], write_type: WriteType) -> SoundcoreLibResult<()> {
+        let mut actual_write_type: btleplug::api::WriteType = match write_type {
+            WriteType::WithResponse => btleplug::api::WriteType::WithResponse,
+            WriteType::WithoutResponse => btleplug::api::WriteType::WithoutResponse,
+        };
+        
+        if actual_write_type == btleplug::api::WriteType::WithoutResponse 
+            && !self.write_characteristic.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE) {
+            actual_write_type = btleplug::api::WriteType::WithResponse;
+        }
+
         let (peripheral, writer_characteristic, bytes) = (
             self.peripheral.clone(),
             self.write_characteristic.clone(),
@@ -178,7 +188,7 @@ impl BLEConnection for BtlePlugConnection {
         );
         tokio::spawn(async move {
             peripheral
-                .write(&writer_characteristic, &bytes, write_type.into())
+                .write(&writer_characteristic, &bytes, actual_write_type)
                 .await
         })
         .await
