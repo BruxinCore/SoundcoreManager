@@ -84,20 +84,19 @@ impl BtlePlugConnection {
             trace!("Inspecting Service: {:#?}", service);
 
             let read_characteristic = service.characteristics.clone().into_iter().find(|c| {
-                let uuid_str = c.uuid.to_string();
-                c.properties.contains(CharPropFlags::NOTIFY) 
-                    && !uuid_str.starts_with("fe2c1234") 
-                    && !uuid_str.starts_with("fe2c1235") 
-                    && !uuid_str.starts_with("fe2c1236")
+                let uuid_str = c.uuid.to_string().to_lowercase();
+                let is_excluded = uuid_str.contains("fe2c1234") || uuid_str.contains("fe2c1235") || uuid_str.contains("fe2c1236");
+                let has_notify = c.properties.contains(CharPropFlags::NOTIFY);
+                trace!("Checking READ char: {} | has_notify: {} | is_excluded: {}", uuid_str, has_notify, is_excluded);
+                has_notify && !is_excluded
             });
 
             let write_characteristic = service.characteristics.clone().into_iter().find(|c| {
-                let uuid_str = c.uuid.to_string();
-                (c.properties.contains(CharPropFlags::WRITE)
-                    || c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE))
-                    && !uuid_str.starts_with("fe2c1234") 
-                    && !uuid_str.starts_with("fe2c1235") 
-                    && !uuid_str.starts_with("fe2c1236")
+                let uuid_str = c.uuid.to_string().to_lowercase();
+                let is_excluded = uuid_str.contains("fe2c1234") || uuid_str.contains("fe2c1235") || uuid_str.contains("fe2c1236");
+                let has_write = c.properties.contains(CharPropFlags::WRITE) || c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE);
+                trace!("Checking WRITE char: {} | has_write: {} | is_excluded: {}", uuid_str, has_write, is_excluded);
+                has_write && !is_excluded
             });
 
             if let (Some(read_characteristic), Some(write_characteristic)) =
