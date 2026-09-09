@@ -83,20 +83,21 @@ impl BtlePlugConnection {
         for service in services.iter() {
             trace!("Inspecting Service: {:#?}", service);
 
-            let excluded_characteristics = [
-                uuid!("fe2c1234-8366-4814-8eb0-01de32100bea"), // Key-based Pairing
-                uuid!("fe2c1235-8366-4814-8eb0-01de32100bea"), // Passkey
-                uuid!("fe2c1236-8366-4814-8eb0-01de32100bea"), // Account Key
-            ];
-
             let read_characteristic = service.characteristics.clone().into_iter().find(|c| {
-                c.properties.contains(CharPropFlags::NOTIFY) && !excluded_characteristics.contains(&c.uuid)
+                let uuid_str = c.uuid.to_string();
+                c.properties.contains(CharPropFlags::NOTIFY) 
+                    && !uuid_str.starts_with("fe2c1234") 
+                    && !uuid_str.starts_with("fe2c1235") 
+                    && !uuid_str.starts_with("fe2c1236")
             });
 
             let write_characteristic = service.characteristics.clone().into_iter().find(|c| {
+                let uuid_str = c.uuid.to_string();
                 (c.properties.contains(CharPropFlags::WRITE)
                     || c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE))
-                    && !excluded_characteristics.contains(&c.uuid)
+                    && !uuid_str.starts_with("fe2c1234") 
+                    && !uuid_str.starts_with("fe2c1235") 
+                    && !uuid_str.starts_with("fe2c1236")
             });
 
             if let (Some(read_characteristic), Some(write_characteristic)) =
