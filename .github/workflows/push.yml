@@ -2,16 +2,14 @@ name: 'Build latest commit'
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
+    branches: [ 'master' ]
 
 jobs:
   build-tauri:
     strategy:
       fail-fast: true
       matrix:
-        platform: [ windows-latest ]
+        platform: [windows-latest]
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -33,6 +31,19 @@ jobs:
             ~/.cargo/bin/
             ~/.cargo/registry/index/
             ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            src-tauri/target/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: ${{ runner.os }}-cargo
+
+      - name: ⏬ Setup node version
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: ⏬ Enable corepack and install
+        run: corepack enable && corepack install
 
       - name: 📥 Install Node Dependencies
         run: yarn install --frozen-lockfile 
