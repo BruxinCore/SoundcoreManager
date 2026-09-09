@@ -8,6 +8,8 @@ on:
 
 jobs:
   build-tauri-and-release:
+    permissions:
+      contents: write
     strategy:
       fail-fast: true
       matrix:
