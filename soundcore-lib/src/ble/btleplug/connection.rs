@@ -12,12 +12,13 @@ use uuid::{uuid, Uuid};
 use crate::ble::{BLEConnection, BLEConnectionUuidSet, BLEDeviceDescriptor, WriteType};
 use crate::error::{SoundcoreLibError, SoundcoreLibResult};
 
-static EXCLUDED_SERVICE_UUIDS: [Uuid; 5] = [
+static EXCLUDED_SERVICE_UUIDS: [Uuid; 6] = [
     uuid!("00001800-0000-1000-8000-00805f9b34fb"),
     uuid!("00001801-0000-1000-8000-00805f9b34fb"),
     uuid!("86868686-8686-8686-8686-868686868686"),
     uuid!("66666666-6666-6666-6666-666666666666"),
     uuid!("00007033-0000-1000-8000-00805f9b34fb"),
+    uuid!("0000fe2c-0000-1000-8000-00805f9b34fb"),
 ];
 
 pub struct BtlePlugConnection {
