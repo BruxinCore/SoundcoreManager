@@ -15,7 +15,7 @@ jobs:
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: ⚡ Set short SHA ENV
         run: echo "SHORT_SHA=$("${{ github.sha }}".SubString(0, 8))" >> $env:GITHUB_ENV
@@ -26,7 +26,7 @@ jobs:
           toolchain: stable
 
       - name: ⚡ Set up cargo cache
-        uses: actions/cache@v3
+        uses: actions/cache@v4
         continue-on-error: false
         with:
           path: |
@@ -40,7 +40,7 @@ jobs:
           restore-keys: ${{ runner.os }}-cargo
 
       - name: 🔄 Sync node version
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
           cache: "yarn"
@@ -83,7 +83,7 @@ jobs:
 
       - name: ⏫ Upload Build Artifact
         if: matrix.platform == 'windows-latest'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: SoundcoreManager-${{ matrix.platform }}.exe
           path: target\release\deps\SoundcoreManager-${{ matrix.platform }}-${{ env.SHORT_SHA }}.exe

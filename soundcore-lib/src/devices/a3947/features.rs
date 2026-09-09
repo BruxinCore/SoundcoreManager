@@ -10,7 +10,7 @@ pub fn a3947_features() -> DeviceFeatureSet {
         equalizer_features: Some(EqualizerFeatures {
             bands: 10,
             channels: 2,
-            has_bass_up: false, // Reusing A3040 eq command which supports custom profiles directly
+            has_bass_up: false,
         }),
         flags: Arc::new([
             FeatureFlags::TOUCH_TONE,
