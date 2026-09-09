@@ -68,7 +68,7 @@ jobs:
         with:
           tag_name: soundcoremanager-${{ env.SHORT_SHA }}
           name: 'Soundcore Manager ${{ env.SHORT_SHA }}'
-          draft: true
+          draft: false
           files: |
             target/release/manager-app.exe
             target/release/bundle/nsis/*.exe
