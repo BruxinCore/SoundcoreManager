@@ -11,21 +11,21 @@ use uuid::{uuid, Uuid};
 use crate::ble::{BLEConnection, BLEConnectionUuidSet, BLEDeviceDescriptor, WriteType};
 use crate::error::{SoundcoreLibError, SoundcoreLibResult};
 
-static EXCLUDED_SERVICE_UUIDS: [Uuid; 6] = [
+static EXCLUDED_SERVICE_UUIDS: [Uuid; 5] = [
     uuid!("00001800-0000-1000-8000-00805f9b34fb"),
     uuid!("00001801-0000-1000-8000-00805f9b34fb"),
     uuid!("86868686-8686-8686-8686-868686868686"),
     uuid!("66666666-6666-6666-6666-666666666666"),
     uuid!("00007033-0000-1000-8000-00805f9b34fb"),
-    uuid!("0000fe2c-0000-1000-8000-00805f9b34fb"), // Google Fast Pair
 ];
 
 pub struct BtlePlugConnection {
     peripheral: Peripheral,
     uuid_set: BLEConnectionUuidSet,
     descriptor: BLEDeviceDescriptor,
-    read_characteristic: Characteristic,
     write_characteristic: Characteristic,
+    read_characteristic: Characteristic,
+    value_changed: Arc<RwLock<Option<()>>>,
 }
 
 impl BtlePlugConnection {
@@ -61,8 +61,9 @@ impl BtlePlugConnection {
                 peripheral,
                 uuid_set,
                 descriptor,
-                read_characteristic,
                 write_characteristic,
+                read_characteristic,
+                value_changed: Arc::new(RwLock::new(Some(()))),
             })
         })
         .await?
@@ -80,13 +81,21 @@ impl BtlePlugConnection {
 
         for service in services.iter() {
             trace!("Inspecting Service: {:#?}", service);
+
+            let excluded_characteristics = [
+                uuid!("fe2c1234-8366-4814-8eb0-01de32100bea"), // Key-based Pairing
+                uuid!("fe2c1235-8366-4814-8eb0-01de32100bea"), // Passkey
+                uuid!("fe2c1236-8366-4814-8eb0-01de32100bea"), // Account Key
+            ];
+
             let read_characteristic = service.characteristics.clone().into_iter().find(|c| {
-                c.properties.contains(CharPropFlags::NOTIFY)
+                c.properties.contains(CharPropFlags::NOTIFY) && !excluded_characteristics.contains(&c.uuid)
             });
 
             let write_characteristic = service.characteristics.clone().into_iter().find(|c| {
-                c.properties.contains(CharPropFlags::WRITE)
-                    || c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE)
+                (c.properties.contains(CharPropFlags::WRITE)
+                    || c.properties.contains(CharPropFlags::WRITE_WITHOUT_RESPONSE))
+                    && !excluded_characteristics.contains(&c.uuid)
             });
 
             if let (Some(read_characteristic), Some(write_characteristic)) =
