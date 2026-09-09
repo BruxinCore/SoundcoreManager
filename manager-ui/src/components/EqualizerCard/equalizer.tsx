@@ -118,9 +118,10 @@ export const Equalizer = forwardRef<EqualizerRef, EqualizerProps>((props, ref) =
           display: true,
           stepSize: 3,
           color: '#888888',
-          callback: function(value) {
-            if (value === 0) return '0';
-            if (value > 0) return '+' + value;
+          callback: function(value: string | number) {
+            const num = Number(value);
+            if (num === 0) return '0';
+            if (num > 0) return '+' + num;
             return value;
           }
         }
