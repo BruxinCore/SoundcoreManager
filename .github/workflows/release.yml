@@ -66,8 +66,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: soundcoremanager-${{ env.SHORT_SHA }}
-          name: 'Soundcore Manager ${{ env.SHORT_SHA }}'
+          tag_name: v0.2.0-v12
+          name: 'Soundcore Manager v12'
           draft: false
           files: |
             target/release/manager-app.exe
