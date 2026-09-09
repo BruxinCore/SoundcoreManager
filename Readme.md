@@ -31,6 +31,7 @@
 | A3028    | Life Q30          |
 | A3029    | Life Tune         |
 | A3935    | Life A2 NC        |
+| A3947    | Liberty 4 NC      |
 
 # Planned Support - Need testers
 

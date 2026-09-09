@@ -19,7 +19,7 @@ impl EqCommandBuilder {
 
     pub fn build(self) -> Vec<u8> {
         match self.model {
-            KnownProductCodes::A3040 => A3040EqUpdateCommand::new(self.eq).bytes(),
+            KnownProductCodes::A3040 | KnownProductCodes::A3947 => A3040EqUpdateCommand::new(self.eq).bytes(),
             KnownProductCodes::A3951 => A3951EqUpdateCommand::new(self.eq).bytes(),
             _ => {
                 warn!("Unknown product code, using A3951 as default");

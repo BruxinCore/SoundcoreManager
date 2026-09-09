@@ -1,5 +1,5 @@
 use crate::{
-    devices::{A3040SoundModeUpdateCommand, A3951SoundModeUpdateCommand},
+    devices::{A3040SoundModeUpdateCommand, A3947SoundModeUpdateCommand, A3951SoundModeUpdateCommand},
     models::{ANCMode, SoundMode, TransparencyMode},
     packets::Packet,
     types::KnownProductCodes,
@@ -18,6 +18,7 @@ impl SoundModeCommandBuilder {
     pub fn build(self) -> Vec<u8> {
         match self.model {
             KnownProductCodes::A3040 => A3040SoundModeUpdateCommand::new(self.sound_mode).bytes(),
+            KnownProductCodes::A3947 => A3947SoundModeUpdateCommand::new(self.sound_mode).bytes(),
             KnownProductCodes::A3951 => A3951SoundModeUpdateCommand::new(self.sound_mode).bytes(),
             _ => self.find_builder(),
         }

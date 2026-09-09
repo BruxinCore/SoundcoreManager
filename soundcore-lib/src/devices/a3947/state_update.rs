@@ -152,8 +152,7 @@ pub fn parse_a3947_state_update<'a, E: ParseError<'a>>(
 impl From<A3947StateResponse> for DeviceStateResponse {
     fn from(value: A3947StateResponse) -> Self {
         DeviceStateResponse {
-            // TODO: add feature set
-            feature_set: Default::default(),
+            feature_set: super::a3947_features(),
             battery: value.battery.into(),
             sound_mode: value.sound_mode,
             eq: value.eq.into(),
