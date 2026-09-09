@@ -1,0 +1,30 @@
+﻿2026-09-09T11:52:49.6701054Z Current runner version: '2.337.0'
+2026-09-09T11:52:49.6728788Z ##[group]Runner Image Provisioner
+2026-09-09T11:52:49.6729651Z Hosted Compute Agent
+2026-09-09T11:52:49.6730198Z Version: 20260819.586
+2026-09-09T11:52:49.6730784Z Commit: 3cc4a88dfa507ef76119ad1bb3eccc6378bb2b76
+2026-09-09T11:52:49.6731503Z Build Date: 2026-08-18T23:20:18Z
+2026-09-09T11:52:49.6732444Z Worker ID: {0c2dba09-33e1-40ab-9123-31d12dd1ff82}
+2026-09-09T11:52:49.6733871Z Azure Region: northcentralus
+2026-09-09T11:52:49.6734627Z ##[endgroup]
+2026-09-09T11:52:49.6736664Z ##[group]Operating System
+2026-09-09T11:52:49.6737494Z Microsoft Windows Server 2025
+2026-09-09T11:52:49.6738164Z 10.0.26100
+2026-09-09T11:52:49.6738659Z Datacenter
+2026-09-09T11:52:49.6739128Z ##[endgroup]
+2026-09-09T11:52:49.6739628Z ##[group]Runner Image
+2026-09-09T11:52:49.6740225Z Image: windows-2025-vs2026
+2026-09-09T11:52:49.6740773Z Version: 20260824.214.3
+2026-09-09T11:52:49.6742184Z Included Software: https://github.com/actions/runner-images/blob/win25-vs2026/20260824.214/images/windows/Windows2025-VS2026-Readme.md
+2026-09-09T11:52:49.6743846Z Image Release: https://github.com/actions/runner-images/releases/tag/win25-vs2026%2F20260824.214
+2026-09-09T11:52:49.6744808Z ##[endgroup]
+2026-09-09T11:52:49.6745892Z ##[group]GITHUB_TOKEN Permissions
+2026-09-09T11:52:49.6747774Z Contents: read
+2026-09-09T11:52:49.6748338Z Metadata: read
+2026-09-09T11:52:49.6748884Z Packages: read
+2026-09-09T11:52:49.6749446Z ##[endgroup]
+2026-09-09T11:52:49.6751389Z Secret source: Actions
+2026-09-09T11:52:49.6752430Z Prepare workflow directory
+2026-09-09T11:52:49.7179755Z Prepare all required actions
+2026-09-09T11:52:49.7227632Z Getting action download info
+2026-09-09T11:52:49.9412278Z ##[error]This request has been automatically failed because it uses a deprecated version of `actions/cache: v2`. Please update your workflow to use v3/v4 of actions/cache to avoid interruptions. Learn more: https://github.blog/changelog/2024-12-05-notice-of-upcoming-releases-and-breaking-changes-for-github-actions/#actions-cache-v1-v2-and-actions-toolkit-cache-package-closing-down

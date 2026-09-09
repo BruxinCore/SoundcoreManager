@@ -57,27 +57,17 @@ jobs:
         run: yarn install --frozen-lockfile 
 
       - name: 🔨 Build
-        uses: tauri-apps/tauri-action@v0
-        id: tauri-build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: soundcoremanager-v__VERSION__
-          releaseName: 'Soundcore Manager v__VERSION__'
-          releaseBody: 'See the assets to download this version and install.'
-          releaseDraft: true
-          prerelease: false
+        run: yarn tauri build
 
-      - name: ⏫ Upload Release Asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1.0.2
+      - name: ⏫ Create Release
+        uses: softprops/action-gh-release@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.tauri-build.outputs.releaseUploadUrl }}
-          asset_path: src-tauri\target\release\deps\soundcoremanager.exe
-          asset_name: SoundcoreManager-${{ matrix.platform }}-${{ env.SHORT_SHA }}.exe
-          asset_content_type: application/vnd.microsoft.portable-executable.
+          tag_name: soundcoremanager-${{ env.SHORT_SHA }}
+          name: 'Soundcore Manager ${{ env.SHORT_SHA }}'
+          draft: true
+          files: src-tauri\target\release\deps\soundcoremanager.exe
 
       - name: Rename soundcoremanager.exe
         if: matrix.platform == 'windows-latest'
