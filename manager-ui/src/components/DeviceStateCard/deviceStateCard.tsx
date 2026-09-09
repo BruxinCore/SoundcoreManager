@@ -25,11 +25,11 @@ export const DeviceStateCard: React.FC<{
           </div>
           
           <div className="w-2/3 flex flex-col justify-center px-4">
-            <div className="flex w-full justify-between items-start">
-              <h1 className="text-2xl font-bold text-white tracking-wide">
+            <div className="flex w-full items-start justify-between gap-2">
+              <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-white tracking-wide leading-tight">
                 {getDeviceName(state?.serial?.model)}
               </h1>
-              <div className="flex mt-1">
+              <div className="flex shrink-0 mt-1">
                 <BatteryRow battery={state?.battery} />
               </div>
             </div>

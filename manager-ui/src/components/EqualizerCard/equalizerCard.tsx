@@ -184,8 +184,8 @@ const EQModeCard: React.FC<EQModeCardProps> = ({
       <div className="flex w-full items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex flex-col">
-            <span className={`text-base font-medium ${isSelected ? 'text-white' : 'text-gray-200'}`}>{title}</span>
-            <span className={`text-sm ${isSelected ? 'text-blue-100' : 'text-gray-500'}`}>{subTitle}</span>
+            <span className={`text-base font-bold ${isSelected ? 'text-black' : 'text-gray-200'}`}>{title}</span>
+            <span className={`text-sm ${isSelected ? 'text-gray-800' : 'text-gray-500'}`}>{subTitle}</span>
           </div>
         </div>
         
