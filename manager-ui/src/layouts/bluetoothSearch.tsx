@@ -72,10 +72,10 @@ export const BluetoothSearchLayout: React.FC = () => {
   // }, []);
 
   return (
-    <div>
-      <div className="flex items-center flex-col">
+    <div className="w-full h-full bg-black">
+      <div className="flex items-center flex-col w-full h-full text-white">
         <div className="w-full flex items-center flex-col gap-2 pt-2">
-          <div color="text.secondary">Select a connected device...</div>
+          <div className="text-gray-400">Select a connected device...</div>
           {isScanLoading && <Progress size="sm" isIndeterminate className="w-full" />}
           {!isScanLoading && <div style={{ width: '100vw', height: '0.15rem' }}></div>}
         </div>
@@ -85,13 +85,13 @@ export const BluetoothSearchLayout: React.FC = () => {
         <Button
           isDisabled={!selectedDevice || isConnecting}
           color="primary"
-          className="fixed bottom-4 right-4"
+          className="fixed bottom-4 right-4 bg-[#00e5ff] text-black font-semibold"
           onClick={connectFabClick}>
           Connect <ArrowRight />
         </Button>
         <Button
           isDisabled={isScanLoading || isConnecting}
-          className="fixed bottom-4 left-4"
+          className="fixed bottom-4 left-4 bg-[#2a2a2a] text-white"
           onClick={searchFabClick}>
           Rescan <RefreshCcw />
         </Button>

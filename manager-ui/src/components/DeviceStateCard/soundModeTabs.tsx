@@ -140,26 +140,36 @@ export const SoundModeTabs: React.FC<SoundModeTabsProps> = ({ state }: SoundMode
   };
 
   return (
-    <div className={'flex flex-col w-full justify-center items-center gap-2'}>
-      <CurrentSoundModeTabs
-        selectedSoundMode={selectedSoundMode}
-        onChange={handleCurrentSoundModeChange}
-      />
-      <SubSoundModeTabs
-        buttons={modeButtons}
-        selectedValue={currentSubValue}
-        onClick={handleSubSoundModeChange}
-      />
-      <Slider
-        className={`${isCustomSoundModeSelected ? 'visible transition-all ease-in-out' : 'invisible'} transition-opacity ease-in-out`}
-        size={'sm'}
-        step={1}
-        minValue={0}
-        showSteps={true}
-        value={currentCustomAncOrTransValue}
-        onChange={handleCustomValueChange}
-        maxValue={maxCustomSliderValue}
-      />
+    <div className={'soundcore-card w-full flex flex-col p-4 mb-4 max-w-xl mx-auto'}>
+      <h3 className="text-white font-semibold mb-2">Som ambiente</h3>
+      <div className={'flex flex-col w-full justify-center items-center gap-2'}>
+        <CurrentSoundModeTabs
+          selectedSoundMode={selectedSoundMode}
+          onChange={handleCurrentSoundModeChange}
+        />
+        {selectedSoundMode.current !== CurrentSoundMode.Normal && modeButtons.length > 0 && (
+          <SubSoundModeTabs
+            buttons={modeButtons}
+            selectedValue={currentSubValue}
+            onClick={handleSubSoundModeChange}
+          />
+        )}
+        <Slider
+          className={`${isCustomSoundModeSelected ? 'visible transition-all ease-in-out' : 'invisible'} transition-opacity ease-in-out px-4`}
+          size={'sm'}
+          step={1}
+          minValue={0}
+          showSteps={true}
+          value={currentCustomAncOrTransValue}
+          onChange={handleCustomValueChange}
+          maxValue={maxCustomSliderValue}
+          classNames={{
+            track: "bg-[#2a2a2a]",
+            filler: "bg-[#00e5ff]",
+            thumb: "bg-[#00e5ff]"
+          }}
+        />
+      </div>
     </div>
   );
 };
@@ -173,44 +183,29 @@ const CurrentSoundModeTabs: React.FC<CurrentSoundModeTabsProps> = ({
   selectedSoundMode,
   onChange
 }) => {
-  const imageClassName = 'max-w-full max-h-full h-7 object-contain';
   return (
-    <Tabs
-      color={'primary'}
-      variant={'bordered'}
-      className={'w-full pt-2 flex'}
-      classNames={{ tabList: 'w-full' }}
-      size={'md'}
-      selectedKey={selectedSoundMode.current}
-      onSelectionChange={(k) => onChange(k as CurrentSoundMode)}>
-      <Tab
-        key={CurrentSoundMode.ANC}
-        title={
-          <div className="flex items-center space-x-2">
-            <span>ANC</span>
-            <Image src={ANCIcon} className={imageClassName} />
-          </div>
-        }
-      />
-      <Tab
-        key={CurrentSoundMode.Normal}
-        title={
-          <div className="flex items-center space-x-2">
-            <span>Normal</span>
-            <Image src={NormalIcon} className={imageClassName} />
-          </div>
-        }
-      />
-      <Tab
-        key={CurrentSoundMode.Transparency}
-        title={
-          <div className="flex items-center space-x-2">
-            <span>Transparency</span>
-            <Image src={TransIcon} className={imageClassName} />
-          </div>
-        }
-      />
-    </Tabs>
+    <div className="flex w-full justify-around items-start py-4 px-2">
+      <div className="flex flex-col items-center gap-3 cursor-pointer" onClick={() => onChange(CurrentSoundMode.ANC)}>
+        <div className={selectedSoundMode.current === CurrentSoundMode.ANC ? 'soundcore-circle-btn-active' : 'soundcore-circle-btn'}>
+           <Image src={ANCIcon} className="w-8 h-8 object-contain brightness-0 invert" disableSkeleton />
+        </div>
+        <span className={`text-xs text-center ${selectedSoundMode.current === CurrentSoundMode.ANC ? 'text-white' : 'text-gray-400'}`}>Cancelamento<br/>de ruído</span>
+      </div>
+
+      <div className="flex flex-col items-center gap-3 cursor-pointer" onClick={() => onChange(CurrentSoundMode.Normal)}>
+        <div className={selectedSoundMode.current === CurrentSoundMode.Normal ? 'soundcore-circle-btn-active' : 'soundcore-circle-btn'}>
+           <Image src={NormalIcon} className="w-8 h-8 object-contain brightness-0 invert" disableSkeleton />
+        </div>
+        <span className={`text-xs text-center ${selectedSoundMode.current === CurrentSoundMode.Normal ? 'text-white' : 'text-gray-400'}`}>Normal</span>
+      </div>
+
+      <div className="flex flex-col items-center gap-3 cursor-pointer" onClick={() => onChange(CurrentSoundMode.Transparency)}>
+        <div className={selectedSoundMode.current === CurrentSoundMode.Transparency ? 'soundcore-circle-btn-active' : 'soundcore-circle-btn'}>
+           <Image src={TransIcon} className="w-8 h-8 object-contain brightness-0 invert" disableSkeleton />
+        </div>
+        <span className={`text-xs text-center ${selectedSoundMode.current === CurrentSoundMode.Transparency ? 'text-white' : 'text-gray-400'}`}>Modos de<br/>transparência</span>
+      </div>
+    </div>
   );
 };
 
@@ -222,13 +217,20 @@ interface SubSoundModeTabsProps {
 
 const SubSoundModeTabs: React.FC<SubSoundModeTabsProps> = ({ buttons, selectedValue, onClick }) => {
   return (
-    <Tabs
-      selectedKey={selectedValue}
-      onSelectionChange={(k) => onClick(k as string)}
-      variant={'underlined'}>
+    <div className="flex gap-2 flex-wrap justify-center mb-4 mt-2">
       {buttons.map((b) => (
-        <Tab key={b.value} title={b.title} />
+        <button
+          key={b.value}
+          onClick={() => onClick(b.value)}
+          className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
+            selectedValue === b.value
+              ? 'bg-[#00e5ff] text-black shadow-[0_0_10px_rgba(0,229,255,0.3)]'
+              : 'bg-[#2a2a2a] text-gray-300 hover:bg-[#3a3a3a]'
+          }`}
+        >
+          {b.title}
+        </button>
       ))}
-    </Tabs>
+    </div>
   );
 };

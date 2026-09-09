@@ -14,35 +14,33 @@ export const DeviceStateCard: React.FC<{
   }
 
   return (
-    <>
-      <Card
-        isBlurred
-        className="border-none bg-background/60 dark:bg-default-100/50 m-5 flex"
-        shadow="sm">
-        <CardBody>
-          <div className="grid grid-cols-6 md:grid-cols-12 gap-8 md:gap-4 items-center justify-center">
-            <div className="relative col-span-6 md:col-span-3">
-              <ProductImage model={state?.serial?.model} />
+    <Card
+      className="soundcore-card m-5 p-2 w-full max-w-xl mx-auto flex flex-col items-center justify-center"
+      shadow="none"
+      radius="lg">
+      <CardBody>
+        <div className="flex flex-row items-center justify-between w-full">
+          <div className="w-1/3 flex justify-center items-center">
+            <ProductImage model={state?.serial?.model} />
+          </div>
+          
+          <div className="w-2/3 flex flex-col justify-center px-4">
+            <div className="flex w-full justify-between items-start">
+              <h1 className="text-2xl font-bold text-white tracking-wide">
+                {getDeviceName(state?.serial?.model)}
+              </h1>
+              <div className="flex mt-1">
+                <BatteryRow battery={state?.battery} />
+              </div>
             </div>
-
-            <div className="flex flex-col col-span-6 md:col-span-9 ml-2 mt-4 self-start">
-              <div className="flex justify-between items-start">
-                <div className="flex gap-2">
-                  <h3 className="font-semibold text-foreground/90">
-                    {getDeviceName(state?.serial?.model)}
-                  </h3>
-                  <BatteryRow battery={state?.battery} />
-                </div>
-              </div>
-
-              <div className="flex w-full items-center justify-center">
-                <SoundModeTabs state={state} />
-              </div>
+            <div className="flex items-center gap-2 mt-1">
+              <div className="w-2 h-2 rounded-full bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]"></div>
+              <span className="text-gray-400 text-sm">Ligado</span>
             </div>
           </div>
-        </CardBody>
-      </Card>
-    </>
+        </div>
+      </CardBody>
+    </Card>
   );
 };
 
@@ -56,7 +54,7 @@ const BatteryRow: React.FC<{
 
   if (battery?.type == 'single') {
     return (
-      <div className={'flex items-center'}>
+      <div className={'flex items-center gap-1 text-gray-300'}>
         <BatteryIcon battery={battery.value} />
       </div>
     );
@@ -64,13 +62,13 @@ const BatteryRow: React.FC<{
 
   if (battery?.type == 'dual') {
     return (
-      <div className={'flex items-center gap-3'}>
-        <div className={'flex items-center gap-0.5'}>
-          <p className={'text-small text-foreground/80'}>Left:</p>
+      <div className={'flex items-center gap-3 text-gray-300'}>
+        <div className={'flex items-center gap-1'}>
+          <span className="text-xs font-bold border border-gray-500 rounded-full w-4 h-4 flex items-center justify-center">L</span>
           <BatteryIcon battery={battery.value.left} />
         </div>
-        <div className={'flex items-center gap-0.5'}>
-          <p className={'text-small text-foreground/80'}>Right:</p>
+        <div className={'flex items-center gap-1'}>
+          <span className="text-xs font-bold border border-gray-500 rounded-full w-4 h-4 flex items-center justify-center">R</span>
           <BatteryIcon battery={battery.value.right} />
         </div>
       </div>
@@ -88,9 +86,8 @@ const ProductImage: React.FC<{ model: string | null | undefined }> = ({ model })
   }
 
   const imageProps: React.ComponentProps<typeof Image> = {
-    isBlurred: true,
-    className: 'object-scale-down sm:max-h-48',
-    shadow: 'sm'
+    className: 'object-contain max-h-32 drop-shadow-2xl hover:scale-105 transition-transform duration-500',
+    disableSkeleton: true
   };
 
   return (
@@ -98,10 +95,10 @@ const ProductImage: React.FC<{ model: string | null | undefined }> = ({ model })
       {imageResult && imageResult.kind === 'single' ? (
         <Image src={imageResult.data.img} {...imageProps} />
       ) : (
-        <>
+        <div className="flex items-center justify-center">
           <Image src={imageResult.data.left.img} {...imageProps} />
-          <Image src={imageResult.data.right.img} {...imageProps} />
-        </>
+          <Image src={imageResult.data.right.img} {...imageProps} className="-ml-6 mt-4" />
+        </div>
       )}
     </>
   );

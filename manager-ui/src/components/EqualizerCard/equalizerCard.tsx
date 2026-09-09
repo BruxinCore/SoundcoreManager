@@ -93,55 +93,64 @@ export const EqualizerCard: React.FC<EqualizerCardProps> = ({ state }) => {
   };
 
   return (
-    <Card shadow={'sm'} className={'m-5'}>
-      <CardBody>
-        {state.featureSet.equalizerFeatures && (
-          <>
-            <div className={'grid grid-cols-2 grid-rows-1 gap-5'}>
-              <EQModeCard
-                title={'Preset'}
-                isSelected={!isOnCustom}
-                hasBassUp={hasBassUp}
-                profiles={eqProfiles}
-                currentEqProfile={state.eqConfiguration.value.profile}
-                bassUpValue={state.eqConfiguration.value.profile === EQProfile.BassBooster}
-                onPress={onCardPress}
-                onPresetChange={eqProfileChange}
-                onBassUpChange={onBassUpChange}
-              />
-              <EQModeCard
-                showResetEq
-                title={'Custom'}
-                isSelected={isOnCustom}
-                onPress={onCardPress}
-                onResetEq={eqRef.current?.onReset}
-              />
-            </div>
-            <div className={'w-full'}>
+    <div className="w-full max-w-xl mx-auto flex flex-col gap-2 p-4">
+      <h3 className="text-white font-semibold text-lg mb-2">Efeitos sonoros</h3>
+      {state.featureSet.equalizerFeatures && (
+        <div className="flex flex-col gap-3">
+          <EQModeCard
+            title={'Predefinição'}
+            subTitle={'Assinatura soundcore'}
+            isSelected={!isOnCustom}
+            hasBassUp={hasBassUp}
+            profiles={eqProfiles}
+            currentEqProfile={state.eqConfiguration.value.profile}
+            bassUpValue={state.eqConfiguration.value.profile === EQProfile.BassBooster}
+            onPress={onCardPress}
+            onPresetChange={eqProfileChange}
+            onBassUpChange={onBassUpChange}
+          />
+          <EQModeCard
+            showResetEq
+            title={'EQ personalizado'}
+            subTitle={'Custom'}
+            isSelected={isOnCustom}
+            onPress={onCardPress}
+            onResetEq={eqRef.current?.onReset}
+          />
+          
+          {isOnCustom && (
+            <div className="mt-4 soundcore-card p-4">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-white font-semibold">EQ personalizado</span>
+                <Button isIconOnly size="sm" variant="light" onPress={eqRef.current?.onReset}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </Button>
+              </div>
               <Equalizer
                 bands={state.featureSet.equalizerFeatures.bands}
-                input={isOnCustom ? [...getMappedCustomEqValues()] : [...presetEqValues]}
+                input={[...getMappedCustomEqValues()]}
                 onEqualizerChange={onCustomEqualizerChange}
                 ref={eqRef}
-                disabled={!isOnCustom}
+                disabled={false}
               />
             </div>
-          </>
-        )}
-      </CardBody>
-    </Card>
+          )}
+        </div>
+      )}
+    </div>
   );
 };
 
 interface EQModeCardProps {
-  title: 'Preset' | 'Custom';
+  title: string;
+  subTitle?: string;
   isSelected: boolean;
   hasBassUp?: boolean;
   currentEqProfile?: EQProfile;
   profiles?: Array<string>;
   bassUpValue?: boolean;
   onBassUpChange?: (v: boolean) => void;
-  onPress?: (e: 'Preset' | 'Custom') => void;
+  onPress?: (e: string) => void;
   showResetEq?: boolean;
   onResetEq?: () => void;
   onPresetChange?: (preset: EQProfile) => void;
@@ -149,6 +158,7 @@ interface EQModeCardProps {
 
 const EQModeCard: React.FC<EQModeCardProps> = ({
   title,
+  subTitle,
   isSelected,
   hasBassUp,
   currentEqProfile,
@@ -160,80 +170,52 @@ const EQModeCard: React.FC<EQModeCardProps> = ({
   onResetEq,
   onPresetChange
 }) => {
-  const visibleEqProfile = !bassUpValue
+  const visibleEqProfile = !bassUpValue && currentEqProfile
     ? (currentEqProfile as string)
     : EQProfile.SoundcoreSignature;
 
+  const actualTitleId = title === 'Predefinição' ? 'Preset' : 'Custom';
+
   return (
-    <Card
-      isFooterBlurred
-      isPressable
-      radius="lg"
-      className={
-        'border-none col-span-1 h-24 hover:-translate-y-0.5 ease-in-out transition-all transform-gpu'
-      }
-      style={{
-        ...(isSelected && {
-          outlineColor: 'hsl(var(--nextui-focus) / var(--nextui-focus-opacity, 1))',
-          outlineOffset: '2px',
-          outlineWidth: '2px'
-        })
-      }}
-      onPress={() => onPress && onPress(title)}>
-      <div
-        className={'bg-default-100 p-3 pb-0'}
-        style={{
-          width: '100%',
-          height: '100%'
-        }}>
-        <div className={'flex justify-between'}>
-          <div className={'flex flex-col items-start gap-1'}>
-            <p className={'text-white'}>{title}</p>
-            {profiles && profiles.length > 0 && bassUpValue !== undefined && hasBassUp && (
-              <div className={'flex flex-row items-center gap-1'}>
-                <p className="text-small text-default-600 h-fit">BassUp</p>
-                <Switch
-                  isSelected={bassUpValue}
-                  onValueChange={onBassUpChange}
-                  size="sm"
-                  disabled={!isSelected}
-                />
-              </div>
-            )}
+    <div 
+      className={`w-full flex flex-col p-4 cursor-pointer transition-all ${isSelected ? 'soundcore-card-active' : 'soundcore-card'} hover:scale-[1.01]`}
+      onClick={() => onPress && onPress(actualTitleId)}
+    >
+      <div className="flex w-full items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col">
+            <span className={`text-base font-medium ${isSelected ? 'text-white' : 'text-gray-200'}`}>{title}</span>
+            <span className={`text-sm ${isSelected ? 'text-blue-100' : 'text-gray-500'}`}>{subTitle}</span>
           </div>
         </div>
+        
+        <div className="flex items-center gap-2">
+          {isSelected ? (
+            <div className="w-5 h-5 rounded-full bg-white flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#00f2fe" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+          ) : (
+            <div className="w-5 h-5 rounded-full border-2 border-gray-500"></div>
+          )}
+        </div>
       </div>
-      <CardFooter className={'p-0 h-10'}>
-        {profiles && profiles.length > 0 && (
+
+      {isSelected && profiles && profiles.length > 0 && (
+        <div className="w-full mt-4" onClick={(e) => e.stopPropagation()}>
           <Select
-            //TODO: Remove hack and fix the styles
-            label={!profiles.includes(visibleEqProfile) ? 'Select a profile' : ''}
-            className="w-full p-0"
+            label={!profiles.includes(visibleEqProfile) ? 'Selecione um perfil' : ''}
+            className="w-full"
             size="md"
-            isDisabled={!isSelected}
             onSelectionChange={(e) => {
               onPresetChange && onPresetChange([...e][0] as EQProfile);
             }}
             selectedKeys={[visibleEqProfile]}>
             {profiles.map((p) => (
-              <SelectItem key={p}>{p}</SelectItem>
+              <SelectItem key={p} className="text-black">{p}</SelectItem>
             ))}
           </Select>
-        )}
-        {showResetEq && (
-          <Button
-            className={'w-full'}
-            disabled={!isSelected}
-            onClick={() => {
-              onResetEq && onResetEq();
-            }}>
-            Reset
-          </Button>
-        )}
-      </CardFooter>
-      {/*<CardFooter className="justify-center before:bg-white/10 border-white/20 border-1 overflow-hidden py-1 absolute before:rounded-xl rounded-large bottom-1 w-[calc(100%_-_8px)] shadow-small ml-1 z-10">*/}
-      {/*  <p className="text-tiny">{title}</p>*/}
-      {/*</CardFooter>*/}
-    </Card>
+        </div>
+      )}
+    </div>
   );
 };

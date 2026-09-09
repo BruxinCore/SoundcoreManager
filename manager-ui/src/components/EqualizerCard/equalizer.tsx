@@ -61,13 +61,15 @@ export const Equalizer = forwardRef<EqualizerRef, EqualizerProps>((props, ref) =
       {
         data: [...input],
         spanGaps: false,
-        fill: true,
-        backgroundColor: semanticColors.dark.primary[200],
-        tension: 0.3,
-        pointRadius: !disabled ? 3 : 0,
-        pointHoverRadius: 3,
-        pointBackgroundColor: semanticColors.dark.primary[500],
-        pointBorderWidth: 0
+        fill: false,
+        borderColor: '#ffffff',
+        borderWidth: 2,
+        tension: 0,
+        pointRadius: !disabled ? 8 : 0,
+        pointHoverRadius: 10,
+        pointBackgroundColor: '#000000',
+        pointBorderColor: '#ffffff',
+        pointBorderWidth: 2
       }
     ]
   };
@@ -110,17 +112,26 @@ export const Equalizer = forwardRef<EqualizerRef, EqualizerProps>((props, ref) =
         suggestedMin: MIN_VALUE,
         suggestedMax: MAX_VALUE,
         grid: {
-          display: true
+          display: false
         },
         ticks: {
           display: true,
-          stepSize: 1,
-          autoSkip: false
+          stepSize: 3,
+          color: '#888888',
+          callback: function(value) {
+            if (value === 0) return '0';
+            if (value > 0) return '+' + value;
+            return value;
+          }
         }
       },
       x: {
         grid: {
-          display: false
+          display: true,
+          color: 'rgba(255, 255, 255, 0.1)'
+        },
+        ticks: {
+          color: '#888888'
         }
       }
     },
@@ -128,7 +139,7 @@ export const Equalizer = forwardRef<EqualizerRef, EqualizerProps>((props, ref) =
     plugins: {
       dragData: {
         round: 1,
-        dragX: true,
+        dragX: false,
         showTooltip: true,
         onDragEnd: onDragEnd
       },
@@ -136,16 +147,15 @@ export const Equalizer = forwardRef<EqualizerRef, EqualizerProps>((props, ref) =
         display: false
       },
       title: {
-        display: true,
-        text: !disabled ? 'Custom EQ' : 'Preset EQ'
+        display: false
       }
     },
     responsive: true,
-    maintainAspectRatio: true
+    maintainAspectRatio: false
   };
 
   return (
-    <div className={'mt-3 w-full'} style={{ aspectRatio: 2 }}>
+    <div className={'mt-3 w-full h-64 md:h-80'}>
       <Line data={data} options={options} />
     </div>
   );
