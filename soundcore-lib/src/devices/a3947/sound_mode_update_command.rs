@@ -16,16 +16,8 @@ impl Packet for A3947SoundModeUpdateCommand {
     }
 
     fn payload(&self) -> Vec<u8> {
-        vec![
-            0x11,
-            0x00,
-            self.sound_mode.current.as_u8(),
-            (self.sound_mode.custom_anc.as_u8() << 4) | 0x00, 
-            self.sound_mode.trans_mode.as_u8(),
-            self.sound_mode.anc_mode.as_u8(),
-            0x01, 
-            0x01, 
-            0x00,
-        ]
+        let mut p = vec![0x11, 0x00];
+        p.extend_from_slice(&self.sound_mode.to_bytes_with_custom_transparency());
+        p
     }
 }
